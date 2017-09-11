@@ -170,11 +170,31 @@ if __name__ == '__main__':
   
     de = DE()
     bound = 32.768
+f=open("DE_final_pop.out","w")
+f.write("Final population Data: Variable values || Objective function values\n")
+
+for sim in range(100):
     pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
            for _ in range(20 * D)]  # 20 * dimension of the problem
 
-
-    for i in [x ** 2 for x in range(10)]:
+    v_stat=[]
+    gen_count=0
+    for i in [x ** 2 for x in range(50)]:
+        gen_count=gen_count+1
         random.seed(0)
-        v = de.solve(ackley_2d, pop, iterations=i)
+        v = de.solve(ackley_2d, pop, iterations=i) 
         print(v, '->', ackley_2d(*v))
+        if ackley_2d(*v) < 1e-5:
+            func_eval=gen_count*20*D
+            v_stat.insert(sim,ackley_2d(*v))
+            break
+
+              
+    f.write(str(v))
+    f.write('\t|| ')
+    f.write(str(v_stat))
+    f.write('\n')
+    
+    #del pop,v
+    
+f.close()   
