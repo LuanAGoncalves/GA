@@ -10,8 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-name1 = 'FSADE_final_pop.csv';
-name2 = 'DE_final_pop.csv';
+name1 = 'DE_final_pop.csv';
+name2 = 'FSADE_final_pop.csv';
 
 columns = [];
 
