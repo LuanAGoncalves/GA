@@ -165,8 +165,9 @@ class DE(object):
                                                       'bin crossover.')
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     import math
+
     D=5
     # http://tracer.lcc.uma.es/problems/ackley/ackley.html
     def ackley_2d(x,y,w,z,k):
@@ -178,13 +179,36 @@ if __name__ == '__main__':
   
     de = DE()
     bound = 32.768
-    pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
-           for _ in range(20 * D)]  # 20 * dimension of the problem
-
-
-    for i in [x ** 2 for x in range(10)]:
-        random.seed(0)
-        v = de.solve(ackley_2d, pop, iterations=i)
-        print(v, '->', ackley_2d(*v))
-
+    f=open("FSADE_final_pop.csv","w")
+#    f.write("Final population Data: Variable values || Objective function values\n")
+    for i in range (5):
+        f.write('v['+str(i)+']'+'\t')
+    f.write('output'+'\n')
     
+    for sim in range(100):
+        pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
+               for _ in range(20 * D)]  # 20 * dimension of the problem
+    
+        v_stat=[]
+        gen_count=0
+        for i in [x ** 2 for x in range(50)]:
+            gen_count=gen_count+1
+            v = de.solve(ackley_2d, pop, iterations=i) 
+            print(v, '->', ackley_2d(*v))
+            if ackley_2d(*v) < 1e-2:
+                func_eval=gen_count*20*D
+                v_stat.insert(sim,ackley_2d(*v))
+                break
+    
+                 
+        for i in range (len(v)):
+            f.write(str(v[i])+'\t')
+        f.write(str(v_stat[0])+'\n')
+#        f.write(str(v))
+#        f.write('\t|| ')
+#        f.write(str(v_stat))
+#        f.write('\n')
+        
+        #del pop,v
+        
+    f.close()   
