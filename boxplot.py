@@ -15,7 +15,9 @@ name2 = 'FSADE_final_pop.csv';
 
 columns = [];
 
-n_param = 6
+n_var = 5
+
+n_param = n_var + 2;
 
 temp1 = pd.read_csv(name1, sep='\t', usecols=range(n_param))
 temp2 = pd.read_csv(name2, sep='\t', usecols=range(n_param))
@@ -23,23 +25,44 @@ temp2 = pd.read_csv(name2, sep='\t', usecols=range(n_param))
 
 data = [temp1['output'],temp2['output']]
 
-## don't show outlier points
-#plt.figure()
-#plt.xticks(range(2), ['DE', 'FSADE'])
-#plt.boxplot(data, 0, '')
+data2 = [temp1['func_val'], temp2['func_val']];
 
 # Create a figure instance
-fig = plt.figure(1, figsize=(9, 6))
+fig1 = plt.figure(1, figsize=(9, 6))
 
 # Create an axes instance
-ax = fig.add_subplot(111)
+ax1 = fig1.add_subplot(111)
 
 # Create the boxplot
-bp = ax.boxplot(data)
+bp1 = ax1.boxplot(data)
 
 ## Custom x-axis and y-axis labels
-ax.set_xticklabels(['DE','FSADE'])
-ax.set_ylabel('Average Function Evaluation')
+ax1.set_xticklabels(['DE','FSADE'])
+ax1.set_ylabel('Mean Error')
 
 # Save the figure
-fig.savefig('fig1.png', bbox_inches='tight')
+fig1.savefig('fig1.png', bbox_inches='tight')
+
+fig2 = plt.figure(1, figsize=(9, 6))
+
+# Create an axes instance
+ax2 = fig2.add_subplot(111)
+
+# Create the boxplot
+bp2 = ax2.boxplot(data2)
+
+## Custom x-axis and y-axis labels
+ax2.set_xticklabels(['DE','FSADE'])
+ax2.set_ylabel('Average Function Evaluation')
+
+# Save the figure
+fig2.savefig('fig2.png', bbox_inches='tight')
+
+
+# DE.
+afe_DE = np.mean(temp1['output'])
+sd_DE = np.std(temp1['output'])
+
+#FSADE
+afe_FSADE = np.mean(temp2['output'])
+sd_FSADE = np.std(temp2['output'])

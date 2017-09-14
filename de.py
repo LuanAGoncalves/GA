@@ -173,9 +173,9 @@ if __name__ == '__main__':
     f=open("DE_final_pop.csv","w")
     for i in range (5):
         f.write('v['+str(i)+']'+'\t')
-    f.write('output'+'\n')
+    f.write('output'+'\t'+'func_val'+'\n')
     
-    for sim in range(100):
+    for sim in range(200):
         pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
                for _ in range(20 * D)]  # 20 * dimension of the problem
     
@@ -193,8 +193,6 @@ if __name__ == '__main__':
         
         for i in range (len(v)):
             f.write(str(v[i])+'\t')
-        f.write(str(v_stat[0])+'\n')
-        
-        #del pop,v
+        f.write(str(v_stat[0])+'\t'+str(func_eval)+'\n')
         
     f.close()   

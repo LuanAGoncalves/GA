@@ -2,9 +2,10 @@
 # TODO(alexis): add **tests** (and try unittest.mock.MagicMock at the same
 # time).
 
+import math
 import collections
 import random
-
+import funcs
 
 __all__ = ['DE']
 Individual = collections.namedtuple('Individual', 'ind fit')
@@ -33,7 +34,7 @@ class DE(object):
     def solve(self, fitness, initial_population, iterations=1000):
         current_generation = [Individual(ind, fitness(*ind)) for ind in
                               initial_population]
-        v_current_individual = ackley_2d(*initial_population[0])
+        v_current_individual = function(*initial_population[0])
         for _ in range(iterations):
             trial_generation = []
             self._CR = 1.1-self.probi
@@ -166,26 +167,17 @@ class DE(object):
 
 
 if __name__ == '__main__': 
-    import math
-
     D=5
-    # http://tracer.lcc.uma.es/problems/ackley/ackley.html
-    def ackley_2d(x,y,w,z,k):
-        return (20 + math.e
-                - 20 * math.exp(-.2 * (1/D * (x ** 2 + y ** 2 + w ** 2 + z ** 2 + k ** 2)) ** .5)
-                - math.exp(1/D *
-                           (math.cos(2 * math.pi * x) + math.cos(2 * math.pi * y) + math.cos(2 * math.pi * w) +
-                            math.cos(2 * math.pi * z) + math.cos(2 * math.pi * k))))
+    function = funcs.ackley_Nd
   
     de = DE()
     bound = 32.768
     f=open("FSADE_final_pop.csv","w")
-#    f.write("Final population Data: Variable values || Objective function values\n")
     for i in range (5):
         f.write('v['+str(i)+']'+'\t')
-    f.write('output'+'\n')
+    f.write('output'+'\t'+'func_val'+'\n')
     
-    for sim in range(100):
+    for sim in range(200):
         pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
                for _ in range(20 * D)]  # 20 * dimension of the problem
     
@@ -193,22 +185,16 @@ if __name__ == '__main__':
         gen_count=0
         for i in [x ** 2 for x in range(50)]:
             gen_count=gen_count+1
-            v = de.solve(ackley_2d, pop, iterations=i) 
-            print(v, '->', ackley_2d(*v))
-            if ackley_2d(*v) < 1e-2:
+            v = de.solve(function, pop, iterations=i) 
+            print(v, '->', function(*v))
+            if function(*v) < 1e-2:
                 func_eval=gen_count*20*D
-                v_stat.insert(sim,ackley_2d(*v))
+                v_stat.insert(sim,function(*v))
                 break
     
                  
         for i in range (len(v)):
             f.write(str(v[i])+'\t')
-        f.write(str(v_stat[0])+'\n')
-#        f.write(str(v))
-#        f.write('\t|| ')
-#        f.write(str(v_stat))
-#        f.write('\n')
-        
-        #del pop,v
+        f.write(str(v_stat[0])+'\t'+str(func_eval)+'\n')
         
     f.close()   
