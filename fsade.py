@@ -169,7 +169,6 @@ class DE(object):
 if __name__ == '__main__': 
     D=5
     function = funcs.ackley_Nd
-  
     de = DE()
     bound = 32.768
     f=open("FSADE_final_pop.csv","w")
@@ -177,9 +176,9 @@ if __name__ == '__main__':
         f.write('v['+str(i)+']'+'\t')
     f.write('output'+'\t'+'func_val'+'\n')
     
-    for sim in range(200):
+    for sim in range(100):
         pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
-               for _ in range(20 * D)]  # 20 * dimension of the problem
+               for _ in range(50 * D)]  # 20 * dimension of the problem
     
         v_stat=[]
         gen_count=0

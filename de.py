@@ -157,17 +157,8 @@ class DE(object):
 
 
 if __name__ == '__main__': 
-    import math
-
     D=5
-    # http://tracer.lcc.uma.es/problems/ackley/ackley.html
-    def ackley_2d(x,y,w,z,k):
-        return (20 + math.e
-                - 20 * math.exp(-.2 * (1/D * (x ** 2 + y ** 2 + w ** 2 + z ** 2 + k ** 2)) ** .5)
-                - math.exp(1/D *
-                           (math.cos(2 * math.pi * x) + math.cos(2 * math.pi * y) + math.cos(2 * math.pi * w) +
-                            math.cos(2 * math.pi * z) + math.cos(2 * math.pi * k))))
-  
+    function = funcs.ackley_Nd
     de = DE()
     bound = 32.768
     f=open("DE_final_pop.csv","w")
@@ -177,17 +168,17 @@ if __name__ == '__main__':
     
     for sim in range(200):
         pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
-               for _ in range(20 * D)]  # 20 * dimension of the problem
+               for _ in range(50 * D)]  # 20 * dimension of the problem
     
         v_stat=[]
         gen_count=0
         for i in [x ** 2 for x in range(50)]:
             gen_count=gen_count+1
-            v = de.solve(ackley_2d, pop, iterations=i) 
-            print(v, '->', ackley_2d(*v))
-            if ackley_2d(*v) < 1e-2:
+            v = de.solve(function, pop, iterations=i) 
+            print(v, '->', function(*v))
+            if function(*v) < 1e-2:
                 func_eval=gen_count*20*D
-                v_stat.insert(sim,ackley_2d(*v))
+                v_stat.insert(sim,function(*v))
                 break
     
         
