@@ -21,14 +21,11 @@ def ackley_Nd(*x):
     
 def rastrigin_Nd(*x):
     D = len(x)
-    sum1=0
-    sum2=0
+    rast = 0
     for d in range(len(x)):
-        sum1 = sum1 + x[d]**2
-        sum2 = sum2 - numpy.cos(2 * numpy.pi * x[d])
-        rast=10*D + sum1 + 10 * sum2  
+        rast += x[d]**2 - 10.0*numpy.cos(2 * numpy.pi * x[d])
         
-    return rast
+    return 10.0*D+rast
     
     
 def rosenbrock_Nd(*x):

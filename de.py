@@ -4,6 +4,7 @@
 
 import collections
 import random
+import funcs
 
 
 __all__ = ['DE']
@@ -158,17 +159,19 @@ class DE(object):
 
 if __name__ == '__main__': 
     D=5
-    function = funcs.ackley_Nd
-    de = DE()
+    NP = 50
+    error = 1e-5
+    function = funcs.rastrigin_Nd
     bound = 32.768
     f=open("DE_final_pop.csv","w")
     for i in range (5):
         f.write('v['+str(i)+']'+'\t')
     f.write('output'+'\t'+'func_val'+'\n')
     
-    for sim in range(200):
-        pop = [[random.uniform(-bound, bound), random.uniform(-bound, bound),random.uniform(-bound, bound),random.uniform(-bound, bound), random.uniform(-bound, bound) ]
-               for _ in range(50 * D)]  # 20 * dimension of the problem
+    for sim in range(100):
+        de = DE()
+        pop = [[random.uniform(-bound, bound) for i in range(D) ]
+               for _ in range(NP)]  # 20 * dimension of the problem  # 20 * dimension of the problem
     
         v_stat=[]
         gen_count=0
@@ -176,10 +179,11 @@ if __name__ == '__main__':
             gen_count=gen_count+1
             v = de.solve(function, pop, iterations=i) 
             print(v, '->', function(*v))
-            if function(*v) < 1e-2:
-                func_eval=gen_count*20*D
+            if function(*v) < error:
                 v_stat.insert(sim,function(*v))
                 break
+            else:
+                v_stat.insert(sim,function(*v))
     
         
         for i in range (len(v)):
