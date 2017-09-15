@@ -29,6 +29,7 @@ class DE(object):
         self.F = F
         self.CR = CR
         self.probi = probi
+        self.func_val = 0
     # TODO(alexis): add a fitness_aim param?
     # TODO(alexis): add a generic way to generate initial pop?
     def solve(self, fitness, initial_population, iterations=2e5):
@@ -36,6 +37,7 @@ class DE(object):
                               initial_population]
         v_current_individual = function(*initial_population[0])
         for _ in range(iterations):
+            self.func_val += 1
             trial_generation = []
             self._CR = 1.1-self.probi
             for ind in current_generation:
@@ -169,33 +171,32 @@ class DE(object):
 if __name__ == '__main__': 
     D=30
     NP = 50
+    NFuncVal = 2*pow(10,5)
     error = 1e-5
-    function = funcs.rastrigin_Nd
-    bound = 5.12
+    function = funcs.ellipsoidal_Nd
+    bound = D
     v_stat = []
     f=open("FSADE_final_pop.csv","w")
     for i in range (5):
         f.write('v['+str(i)+']'+'\t')
     f.write('output'+'\t'+'func_val'+'\n')
     
-    for sim in range(10):
+    for sim in range(100):
         de = DE()
         pop = [[random.uniform(-bound, bound) for i in range(D) ]
                for _ in range(NP)]  # 20 * dimension of the problem
         
-        func_val=0
-        for i in [x ** 2 for x in range(2*pow(10,5))]:
-            func_val=func_val+1
+        for i in [x ** 2 for x in range(NFuncVal)]:
             v = de.solve(function, pop, iterations=i) 
-            print(v, '->', function(*v))
+            print(function(*v))
             if function(*v) < error:
                 v_stat.append(function(*v))
                 break
-            if i == 2*pow(10,5)-1:
+            if i == NFuncVal-1:
                 v_stat.append(function(*v))
     
         for i in range (len(v)):
             f.write(str(v[i])+'\t')
-        f.write(str(v_stat[sim])+'\t'+str(func_val)+'\n')
+        f.write(str(v_stat[sim])+'\t'+str(de.func_val)+'\n')
         
     f.close()   

@@ -42,9 +42,9 @@ def exp_Nd(*x):
     sum1=0
     for d in range(len(x)):
         sum1 = sum1 + (x[d])**2
-        exp_Nd=-numpy.exp(-.5*sum1) + 1  
+#        exp_Nd=-numpy.exp(-.5*sum1)  
         
-    return exp_Nd 
+    return -numpy.exp(-.5*sum1)  + 1
         
 def ellipsoidal_Nd(*x):
     ellip=0 
