@@ -32,15 +32,15 @@ class DE(object):
         self.func_val = 0
     # TODO(alexis): add a fitness_aim param?
     # TODO(alexis): add a generic way to generate initial pop?
-    def solve(self, fitness, initial_population, iterations=1000):
+    def solve(self, fitness, initial_population, iterations = 1000):
         current_generation = [Individual(ind, fitness(*ind)) for ind in
                               initial_population]
         v_current_individual = function(*initial_population[0])
         for _ in range(iterations):
-            self.func_val += 1
             trial_generation = []
             self._CR = 1.1-self.probi
             for ind in current_generation:
+                self.func_val += 1
                 self._F = (2.2-self.probi)*random.uniform(-.5,.5)#                v_current_individual = ackley_2d(initial_population[ind])
                 v = self._mutate(current_generation)
                 u = self._crossover(ind.ind, v)
@@ -175,6 +175,7 @@ if __name__ == '__main__':
     error = 1e-5
     function = funcs.ellipsoidal_Nd
     bound = D
+    iterations = 1000
     v_stat = []
     f=open("FSADE_final_pop.csv","w")
     for i in range (D):

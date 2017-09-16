@@ -36,10 +36,10 @@ class DE(object):
                               initial_population]
 
         for _ in range(iterations):
-            self.func_val += 1
             trial_generation = []
 
             for ind in current_generation:
+                self.func_val += 1
                 v = self._mutate(current_generation)
                 u = self._crossover(ind.ind, v)
 
@@ -177,7 +177,6 @@ if __name__ == '__main__':
         pop = [[random.uniform(-bound, bound) for i in range(D) ]
                for _ in range(NP)]  # 20 * dimension of the problem  # 20 * dimension of the problem
         
-        func_val=0
         for i in range(NFuncVal):
             v = de.solve(function, pop, iterations=i) 
             print(function(*v))
