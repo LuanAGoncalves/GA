@@ -169,7 +169,7 @@ class DE(object):
 
 
 if __name__ == '__main__': 
-    D=30
+    D=2
     NP = 50
     NFuncVal = 2*pow(10,5)
     error = 1e-5
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     bound = D
     v_stat = []
     f=open("FSADE_final_pop.csv","w")
-    for i in range (5):
+    for i in range (D):
         f.write('v['+str(i)+']'+'\t')
     f.write('output'+'\t'+'func_val'+'\n')
     
