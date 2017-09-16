@@ -32,7 +32,7 @@ class DE(object):
         self.func_val = 0
     # TODO(alexis): add a fitness_aim param?
     # TODO(alexis): add a generic way to generate initial pop?
-    def solve(self, fitness, initial_population, iterations=2e5):
+    def solve(self, fitness, initial_population, iterations=1000):
         current_generation = [Individual(ind, fitness(*ind)) for ind in
                               initial_population]
         v_current_individual = function(*initial_population[0])
@@ -186,7 +186,7 @@ if __name__ == '__main__':
         pop = [[random.uniform(-bound, bound) for i in range(D) ]
                for _ in range(NP)]  # 20 * dimension of the problem
         
-        for i in [x ** 2 for x in range(NFuncVal)]:
+        for i in range(NFuncVal):
             v = de.solve(function, pop, iterations=i) 
             print(function(*v))
             if function(*v) < error:

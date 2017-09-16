@@ -28,6 +28,7 @@ class DE(object):
         self.z = z
         self.F = F
         self.CR = CR
+        self.func_val = 0
     # TODO(alexis): add a fitness_aim param?
     # TODO(alexis): add a generic way to generate initial pop?
     def solve(self, fitness, initial_population, iterations=1000):
@@ -35,6 +36,7 @@ class DE(object):
                               initial_population]
 
         for _ in range(iterations):
+            self.func_val += 1
             trial_generation = []
 
             for ind in current_generation:
@@ -176,8 +178,7 @@ if __name__ == '__main__':
                for _ in range(NP)]  # 20 * dimension of the problem  # 20 * dimension of the problem
         
         func_val=0
-        for i in [x ** 2 for x in range(NFuncVal)]:
-            func_val=func_val+1
+        for i in range(NFuncVal):
             v = de.solve(function, pop, iterations=i) 
             print(function(*v))
             if function(*v) < error:
@@ -188,6 +189,6 @@ if __name__ == '__main__':
     
         for i in range (len(v)):
             f.write(str(v[i])+'\t')
-        f.write(str(v_stat[sim])+'\t'+str(func_val)+'\n')
+        f.write(str(v_stat[sim])+'\t'+str(de.func_val)+'\n')
         
     f.close()   
