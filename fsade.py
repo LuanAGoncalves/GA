@@ -6,6 +6,7 @@ import math
 import collections
 import random
 import funcs
+import numpy as np
 
 __all__ = ['DE']
 Individual = collections.namedtuple('Individual', 'ind fit')
@@ -22,7 +23,7 @@ class DE(object):
     match their equivalents in the paper.
     """
 
-    def __init__(self, x='rand', y=1, z='bin', *, F=.5, CR=.1,probi=random.uniform(.1,1)):
+    def __init__(self, min_real, x='rand', y=1, z='bin', *, F=.5, CR=.1,probi=random.uniform(.1,1)):
         self.x = x
         self.y = y
         self.z = z
@@ -31,13 +32,13 @@ class DE(object):
         self.probi = probi
         self.func_val = 0
         self.criterion_found = 0
+        self.min_real = min_real
     # TODO(alexis): add a fitness_aim param?
     # TODO(alexis): add a generic way to generate initial pop?
-    def solve(self, fitness, initial_population, iterations = 2*pow(10,5)):
+    def solve(self, NP, fitness, initial_population, iterations = 2*pow(10,5)):
         current_generation = [Individual(ind, fitness(*ind)) for ind in
                               initial_population]
-        v_current_individual = function(*initial_population[0])
-        for _ in range(iterations):
+        for _ in range(int(iterations/NP)):
             trial_generation = []
             self._CR = 1.1-self.probi
             for ind in current_generation:
@@ -51,7 +52,7 @@ class DE(object):
             current_generation = self._selection(current_generation,
                                                  trial_generation)
             best_index = self._get_best_index(current_generation)
-            if function(*(current_generation[best_index].ind)) < error:
+            if np.abs(function(*(current_generation[best_index].ind))-self.min_real) < error:
                 self.criterion_found += 1
                 break
             
@@ -173,12 +174,16 @@ class DE(object):
 
 
 if __name__ == '__main__': 
-    D=30
+    D=2
     NP = 50
     iterations = 2*pow(10,5)
     error = 1e-5
-    function = funcs.ellipsoidal_Nd
-    bound = D
+    function = funcs.branin_Nd
+    bound11 = -5
+    bound12 = 10
+    bound21 = 0
+    bound22 = 15
+    min_real = 0.3979
     v_stat = []
     Ncriterion_found = []
     f=open("FSADE_final_pop.csv","w")
@@ -189,10 +194,10 @@ if __name__ == '__main__':
     
     for sim in range(100):
         print ("SIM = ", str(sim))
-        de = DE()
-        pop = [[random.uniform(-bound, bound) for i in range(D) ]
+        de = DE(min_real)
+        pop = [[random.uniform(bound11, bound12), random.uniform(-bound21, bound22) ]
                for _ in range(NP)]  # 20 * dimension of the problem
-        v = de.solve(function, pop, iterations) 
+        v = de.solve(NP, function, pop, iterations) 
         v_stat.append(function(*v))
         Ncriterion_found.append(de.criterion_found)
 #        for i in range(NFuncVal):
