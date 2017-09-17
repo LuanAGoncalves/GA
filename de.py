@@ -29,9 +29,10 @@ class DE(object):
         self.F = F
         self.CR = CR
         self.func_val = 0
+        self.criterion_found = 0
     # TODO(alexis): add a fitness_aim param?
     # TODO(alexis): add a generic way to generate initial pop?
-    def solve(self, fitness, initial_population, iterations=1000):
+    def solve(self, fitness, initial_population, iterations=2*pow(10,5)):
         current_generation = [Individual(ind, fitness(*ind)) for ind in
                               initial_population]
 
@@ -49,6 +50,7 @@ class DE(object):
                                                  trial_generation)
             best_index = self._get_best_index(current_generation)
             if function(*(current_generation[best_index].ind)) < error:
+                self.criterion_found += 1
                 break
             
         return current_generation[best_index].ind
@@ -162,24 +164,28 @@ class DE(object):
 
 
 if __name__ == '__main__': 
-    D=2
+    D=30
     NP = 50
     iterations = 2*pow(10,5)
     error = 1e-5
-    function = funcs.rastrigin_Nd
+    function = funcs.ellipsoidal_Nd
     bound = D
     v_stat = []
+    Ncriterion_found = []
     f=open("DE_final_pop.csv","w")
     for i in range (D):
         f.write('v['+str(i)+']'+'\t')
+    f.write('Ncriterion_found'+'\t')
     f.write('output'+'\t'+'func_val'+'\n')
     
     for sim in range(100):
+        print ("SIM = ", str(sim))
         de = DE()
         pop = [[random.uniform(-bound, bound) for i in range(D) ]
                for _ in range(NP)]  # 20 * dimension of the problem  # 20 * dimension of the problem
         v = de.solve(function, pop, iterations) 
         v_stat.append(function(*v))
+        Ncriterion_found.append(de.criterion_found)
 #        for i in range(NFuncVal):
 #            v = de.solve(function, pop, iterations) 
 #            print(function(*v))
@@ -191,6 +197,7 @@ if __name__ == '__main__':
     
         for i in range (len(v)):
             f.write(str(v[i])+'\t')
+        f.write(str(Ncriterion_found[-1])+'\t')
         f.write(str(v_stat[sim])+'\t'+str(de.func_val)+'\n')
         
     f.close()   
