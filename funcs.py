@@ -54,6 +54,19 @@ def ellipsoidal_Nd(*x):
     
     return ellip
 
+def branin_Nd(*x):
+    a=1
+    b=5.1/(4*numpy.pi**2)
+    c=5/numpy.pi
+    d=6
+    e=10
+    f=1/(8*numpy.pi)
+    
+    branin = a*(x[1] - b*x[0]**2 + c*x[0] - d)**2 + e*(1-f)*numpy.cos(x[0]) + e
+    
+    return branin
+
+
 if __name__ == '__main__': 
     x=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]*3
     
