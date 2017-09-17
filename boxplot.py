@@ -15,7 +15,7 @@ name2 = 'FSADE_final_pop.csv';
 
 columns = [];
 
-n_var = 5
+n_var = 2
 
 n_param = n_var + 2;
 

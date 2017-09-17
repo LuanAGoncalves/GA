@@ -49,8 +49,10 @@ class DE(object):
                 self._F = 1.1-self.probi   
             current_generation = self._selection(current_generation,
                                                  trial_generation)
-
-        best_index = self._get_best_index(current_generation)
+            best_index = self._get_best_index(current_generation)
+            if function(*(current_generation[best_index].ind)) < error:
+                break
+            
         return current_generation[best_index].ind
 
     def _mutate(self, population):
@@ -171,7 +173,7 @@ class DE(object):
 if __name__ == '__main__': 
     D=2
     NP = 50
-    NFuncVal = 2*pow(10,5)
+    iterations = 2*pow(10,5)
     error = 1e-5
     function = funcs.ellipsoidal_Nd
     bound = D
@@ -186,15 +188,16 @@ if __name__ == '__main__':
         de = DE()
         pop = [[random.uniform(-bound, bound) for i in range(D) ]
                for _ in range(NP)]  # 20 * dimension of the problem
-        
-        for i in range(NFuncVal):
-            v = de.solve(function, pop, iterations=i) 
-            print(function(*v))
-            if function(*v) < error:
-                v_stat.append(function(*v))
-                break
-            if i == NFuncVal-1:
-                v_stat.append(function(*v))
+        v = de.solve(function, pop, iterations) 
+        v_stat.append(function(*v))
+#        for i in range(NFuncVal):
+#            v = de.solve(function, pop, iterations=i) 
+#            print(function(*v))
+#            if function(*v) < error:
+#                v_stat.append(function(*v))
+#                break
+#            if i == NFuncVal-1:
+#                v_stat.append(function(*v))
     
         for i in range (len(v)):
             f.write(str(v[i])+'\t')
