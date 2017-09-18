@@ -10,8 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-name1 = './GA_ultimate/ellipsoidal/DE_final_pop.csv';
-name2 = './GA_ultimate/ellipsoidal/FSADE_final_pop.csv';
+name1 = './GA_ultimate/exponential/DE_final_pop.csv';
+name2 = './GA_ultimate/exponential/FSADE_final_pop.csv';
 
 columns = [];
 
@@ -56,14 +56,14 @@ ax2.set_xticklabels(['DE','FSADE'])
 ax2.set_ylabel('Average Function Evaluation')
 
 # Save the figure
-fig2.savefig('./GA_ultimate/ellipsoidal/fig2.png', bbox_inches='tight')
+fig2.savefig('./GA_ultimate/exponential/fig2.png', bbox_inches='tight')
 
 
 # DE.
 mean_DE = np.mean(temp1['output'])
 sd_DE = np.std(temp1['output'])
-afe_DE = np.mean(temp1['func_val'])
 deNcriterion_found = np.sum(temp1['Ncriterion_found'])
+afe_DE = np.mean(temp1['func_val'][temp1['func_val'][:]!=200000])
 
 print ("#### DE ####\n")
 print ("AFE = "+ str(afe_DE)+ "\n")
@@ -74,8 +74,8 @@ print ("Criterion found = "+ str(deNcriterion_found)+ "\n")
 #FSADE
 mean_FSADE = np.mean(temp2['output'])
 sd_FSADE = np.std(temp2['output'])
-afe_FSADE = np.mean(temp1['func_val'])
 fsadeNcriterion_found = np.sum(temp1['Ncriterion_found'])
+afe_FSADE = np.mean(temp2['func_val'][temp2['func_val'][:]!=200000])
 
 print ("#### FSADE ####\n")
 print ("AFE = "+ str(afe_FSADE)+ "\n")
